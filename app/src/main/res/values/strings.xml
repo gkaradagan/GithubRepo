@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">GithubRepo</string>
+    <string name="general_error">Please try again later.</string>
+    <string name="not_connected_to_internet">Please check your internet connection.</string>
+    <string name="general_ok">OK</string>
+    <string name="user_name">User Name</string>
+    <string name="search_repo">Search Repo</string>
+    <string name="search_repo_empty">Please fill the user name field.</string>
+    <string name="star">Star: %s</string>
+    <string name="open_issues">Open Issues: %s</string>
+</resources>

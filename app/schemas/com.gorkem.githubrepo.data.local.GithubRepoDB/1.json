@@ -1,0 +1,34 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "c315e798ebb5ec9f27d29ec7433daad3",
+    "entities": [
+      {
+        "tableName": "favourite",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`repoUniqueId` INTEGER NOT NULL, PRIMARY KEY(`repoUniqueId`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "repoUniqueId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "repoUniqueId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c315e798ebb5ec9f27d29ec7433daad3')"
+    ]
+  }
+}
