@@ -8,6 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.gorkem.githubrepo.R
@@ -20,7 +22,8 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
-abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel> : AppCompatActivity(),
+abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel>(val viewModelClass: Class<V>) :
+    AppCompatActivity(),
     Injectable, HasSupportFragmentInjector {
 
     private var loadingDialog: LoadingDialog? = null
@@ -28,6 +31,9 @@ abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel> : AppCompat
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 
@@ -41,7 +47,7 @@ abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel> : AppCompat
      *
      * @return view model instance
      */
-    abstract val vm: V
+    lateinit var viewModel: V
 
     private val savable = Bundle()
 
@@ -56,11 +62,12 @@ abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel> : AppCompat
         }
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layoutRes)
-        lifecycle.addObserver(vm)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[viewModelClass]
+        lifecycle.addObserver(viewModel)
     }
 
     override fun onDestroy() {
-        lifecycle.removeObserver(vm)
+        lifecycle.removeObserver(viewModel)
         onHideLoading()
         hideSimpleDialog()
         super.onDestroy()
@@ -89,8 +96,10 @@ abstract class BaseActivity<DB : ViewDataBinding, V : BaseViewModel> : AppCompat
                 .setMessage(message)
                 .setPositiveButton(R.string.general_ok) { dialogInterface, _ ->
                     dialogInterface.dismiss()
-                    simpleDialog = null;
+                    simpleDialog = null
                 }
+                .setOnDismissListener { simpleDialog = null }
+                .setOnCancelListener { simpleDialog = null }
                 .setCancelable(true)
                 .create()
             simpleDialog!!.setCanceledOnTouchOutside(true)
