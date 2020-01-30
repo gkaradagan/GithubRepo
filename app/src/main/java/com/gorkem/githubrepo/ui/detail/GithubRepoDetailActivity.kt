@@ -13,10 +13,7 @@ import javax.inject.Inject
 
 
 class GithubRepoDetailActivity :
-    BaseActivity<ActivityGithubRepoDetailBinding, GithubRepoDetailViewModel>() {
-
-    @Inject
-    lateinit var viewModel: GithubRepoDetailViewModel
+    BaseActivity<ActivityGithubRepoDetailBinding, GithubRepoDetailViewModel>(GithubRepoDetailViewModel::class.java) {
 
     //Handle LandScape/Potrait
     private var saveRepo: GithubRepoResponse? by instanceState()
@@ -65,8 +62,6 @@ class GithubRepoDetailActivity :
 
     override val layoutRes: Int
         get() = R.layout.activity_github_repo_detail
-    override val vm: GithubRepoDetailViewModel
-        get() = viewModel
 
     companion object {
         const val REPO = "REPO"

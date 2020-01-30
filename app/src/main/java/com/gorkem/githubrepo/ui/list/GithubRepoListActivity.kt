@@ -18,14 +18,10 @@ import javax.inject.Inject
 
 
 class GithubRepoListActivity :
-    BaseActivity<ActivityGithubRepoListBinding, GithubRepoListViewModel>() {
+    BaseActivity<ActivityGithubRepoListBinding, GithubRepoListViewModel>(GithubRepoListViewModel::class.java) {
 
     private var adapter = GithupRepoListAdapter()
 
-    @Inject
-    lateinit var viewModel: GithubRepoListViewModel
-
-    private var savedList: List<GithubRepoResponse>? by instanceState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,13 +46,10 @@ class GithubRepoListActivity :
             }
         }
 
-        if (savedInstanceState != null && savedList != null)
-            adapter.addItems(savedList!!)
 
         listen(viewModel.repoList,
             object : SlientLoadingResourceImpl<List<GithubRepoResponse>>(this) {
                 override fun onSuccess(data: List<GithubRepoResponse>?) {
-                    savedList = data
                     adapter.addItems(data!!)
                 }
 
@@ -104,8 +97,6 @@ class GithubRepoListActivity :
 
     override val layoutRes: Int
         get() = R.layout.activity_github_repo_list
-    override val vm: GithubRepoListViewModel
-        get() = viewModel
 
     companion object {
         const val DETAIL_REQUEST = 1001

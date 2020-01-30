@@ -1,6 +1,7 @@
 package com.gorkem.githubrepo.di.module
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.gorkem.githubrepo.di.ViewModelFactory
 import com.gorkem.githubrepo.di.ViewModelKey
 import com.gorkem.githubrepo.ui.detail.GithubRepoDetailViewModel
@@ -24,5 +25,5 @@ abstract class ViewModelModule {
     abstract fun bindGithubRepoDetailViewModel(viewModel: GithubRepoDetailViewModel): ViewModel
 
     @Binds
-    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelFactory
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }
